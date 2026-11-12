@@ -1,0 +1,10 @@
+{
+    "name": "etoolking/paypal-agentic-ai-demo",
+    "description": "Amazon Nova Cascading Agentic Commerce Pipeline with PayPal 1-Click Integration",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "aws/aws-sdk-php": "^3.0"
+    }
+}
