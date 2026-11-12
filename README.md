@@ -12,40 +12,54 @@ An autonomous promotional intelligence pipeline that bridges noisy multilingual 
 
 Unlike brittle single-prompt implementations, this engine employs an Agentic Workflow featuring Model Tiering and Early-Exit Gating to optimize unit economics and eliminate hallucinations:
 
-[Unstructured Ingest (Official API Feeds)]
-                   │
-                   ▼
-+-------------------------------------------------------------+
-| Tier-1: Gating & Routing [AI.a: Amazon Nova Lite]           |
-| • Filters 85% noise; dispatches Flight vs. Retail           |
-+---------------+-----------------------------+---------------+
-                | (Retail Stream)             | (Flight Stream)
-                ▼                             ▼
-+-------------------------------+ +-------------------------------+
-| Tier-2: Retail Extract [AI.c] | | Tier-2: Deep Extract [AI.c]   |
-| • Store, Category, Map Type   | | • Routes, Dates, Promo Codes  |
-+---------------+---------------+ +---------------+---------------+
-                ▼                                 ▼
-        [SaleEvents Node]                [Structured Brief]
-                │                                 │
-                │                                 ▼
-                │                  +------------------------------+
-                │                  | Tier-3: Localization [AI.b]  |
-                │                  | • Multi-lingual Enrichment   |
-                │                  +--------------┬---------------+
-                │                                 │
-                │         +-----------------------┴-----------------------+
-                │         v (Success)                             v (Fail)
-                │   [flightsSALE Engine]          +-----------------------+
-                │         │                       | Active Learning Cache |
-                │         │                       +-----------------------+
-                ▼         ▼
-+-------------------------------------------------------------+
-| Action Layer: PayPal Agentic Commerce Engine                |
-| • 1-Click VIP Pro Activation ($0.99 via PayPal SDK)         |
-| • Autonomous Push Alert Provisioning                        |
-+-------------------------------------------------------------+
+```
+====================================================================================================
+[MODEL TIERING SPECIFICATION (AWS BEDROCK - AMAZON NOVA)]
+• amazon.nova-lite-v1:0   [AI.a] Low Token Cost & Compute   | High-Throughput Early-Exit & Routing
+• amazon.nova-2-lite-v1:0 [AI.b] Mid Token Cost & Compute   | Multilingual L10n Task-Specific Synthesis
+• amazon.nova-pro-v1:0    [AI.c] High Reasoning & Compute   | Zero-Hallucination Deep Schema Extraction
+====================================================================================================
 
+                        [Unstructured Ingestion Stream (Official API Feeds)]
+                                                 │
+                                                 ▼
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Tier-1: Low-Cost Gating & Semantic Intent Routing [AI.a: Amazon Nova Lite]                       │
+│ • Filters 90% non-deal social noise at near-zero token cost (Early-Exit Guardrail)               │
+│ • Dispatches validated promotional streams into either Retail Event or Flight Deals track        │
+└────────────────────────────────┬─────────────────────────────────┬───────────────────────────────┘
+                                 │ (Retail Event Stream)           │ (Flight Promo Stream)
+                                 ▼                                 ▼
+┌──────────────────────────────────────────────┐ ┌────────────────────────────────────────────────┐
+│ Tier-2: Retail Disambiguation [AI.c: Nova Pro│ │ Tier-2: Deep Flight Extraction [AI.c: Nova Pro]│
+│ • Zero-hallucination Schema mapping          │ │ • Multi-city route matrix & IATA code resolve  │
+│ • Store category, promo deadline & discounts │ │ • Dual validity windows (booking & travel)     │
+│ • Regional chain footprint (map_type: place) │ │ • Promo code verification & restrictions       │
+└──────────────────────┬───────────────────────┘ └────────────────────────┬───────────────────────┘
+                       ▼                                                  ▼
+               [SaleEvents Node]                               [Structured Deal Brief]
+                       │                                                  │
+                       │                                                  ▼
+                       │                         ┌────────────────────────────────────────────────┐
+                       │                         │ Tier-3: Localization Engine [AI.b: Nova 2 Lite]│
+                       │                         │ • Context-aware multilingual enrichment        │
+                       │                         │ • 10-language localized deal derivation        │
+                       │                         └────────────────────────┬───────────────────────┘
+                       │                                                  │
+                       │                         ┌────────────────────────┴───────────────────────┐
+                       │                         ▼ (Enrichment Success)                           ▼ (Failed)
+                       │               [flightsSALE Production Engine]              ┌─────────────────────┐
+                       │                         │                                  │ Active Learning DB  │
+                       │                         │                                  │ • Edge-case capture │
+                       │                         │                                  │ • Offline eval loop │
+                       │                         │                                  └─────────────────────┘
+                       ▼                         ▼
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Action Layer: PayPal Agentic Commerce Engine                                                     │
+│ • 1-Click VIP Pro Feature Activation ($0.99 Authorization via PayPal JS SDK Sandbox)             │
+│ • Autonomous push alert provisioning dispatched directly to user-configured device endpoints     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 ---
 
 ## Live Evaluation and Deterministic Sandbox
