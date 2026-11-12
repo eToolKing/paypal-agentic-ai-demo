@@ -11,23 +11,22 @@ An autonomous promotional intelligence pipeline that bridges noisy multilingual 
 ## Architecture: Cascading Agentic Workflow
 
 Unlike brittle single-prompt implementations, this engine employs an Agentic Workflow featuring Model Tiering and Early-Exit Gating to optimize unit economics and eliminate hallucinations:
-
 ```
-====================================================================================================
-[MODEL TIERING SPECIFICATION (AWS BEDROCK - AMAZON NOVA)]
-• amazon.nova-lite-v1:0   [AI.a] Low Token Cost & Compute   | High-Throughput Early-Exit & Routing
-• amazon.nova-2-lite-v1:0 [AI.b] Mid Token Cost & Compute   | Multilingual L10n Task-Specific Synthesis
-• amazon.nova-pro-v1:0    [AI.c] High Reasoning & Compute   | Zero-Hallucination Deep Schema Extraction
-====================================================================================================
+===================================================================================================
+                    Model Tiering Specification (Aws Bedrock - Amazon Nova)
+[AI.a] amazon.nova-lite-v1:0   Low Token Cost & Compute | High-Throughput Early-Exit & Routing
+[AI.b] amazon.nova-2-lite-v1:0 Mid Token Cost & Compute | Multilingual L10n Task-Specific Synthesis
+[AI.c] amazon.nova-pro-v1:0    High Reasoning & Compute | Zero-Hallucination Deep Schema Extraction
+===================================================================================================
 
-                        [Unstructured Ingestion Stream (Official API Feeds)]
-                                                 │
-                                                 ▼
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ Tier-1: Low-Cost Gating & Semantic Intent Routing [AI.a: Amazon Nova Lite]                       │
-│ • Filters 90% non-deal social noise at near-zero token cost (Early-Exit Guardrail)               │
-│ • Dispatches validated promotional streams into either Retail Event or Flight Deals track        │
-└────────────────────────────────┬─────────────────────────────────┬───────────────────────────────┘
+                      Unstructured Ingestion Stream (Official API Feeds)
+                                                │
+                                                ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Tier-1: Low-Cost Gating & Semantic Intent Routing [AI.a: Amazon Nova Lite]                      │
+│ • Filters 90% non-deal social noise at near-zero token cost (Early-Exit Guardrail)              │
+│ • Dispatches validated promotional streams into either Retail Event or Flight Deals track       │
+└────────────────────────────────┬─────────────────────────────────┬──────────────────────────────┘
                                  │ (Retail Event Stream)           │ (Flight Promo Stream)
                                  ▼                                 ▼
 ┌──────────────────────────────────────────────┐ ┌────────────────────────────────────────────────┐
@@ -46,19 +45,19 @@ Unlike brittle single-prompt implementations, this engine employs an Agentic Wor
                        │                         │ • 10-language localized deal derivation        │
                        │                         └────────────────────────┬───────────────────────┘
                        │                                                  │
-                       │                         ┌────────────────────────┴───────────────────────┐
-                       │                         ▼ (Enrichment Success)                           ▼ (Failed)
-                       │               [flightsSALE Production Engine]              ┌─────────────────────┐
-                       │                         │                                  │ Active Learning DB  │
-                       │                         │                                  │ • Edge-case capture │
-                       │                         │                                  │ • Offline eval loop │
-                       │                         │                                  └─────────────────────┘
+                       │                         ┌────────────────────────┴─────────────┐
+                       │                         ▼ (Enrichment Success)                 ▼ (Failed)
+                       │               [flightsSALE Production Engine]      ┌─────────────────────┐
+                       │                         │                          │ Active Learning DB  │
+                       │                         │                          │ • Edge-case capture │
+                       │                         │                          │ • Offline eval loop │
+                       │                         │                          └─────────────────────┘
                        ▼                         ▼
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ Action Layer: PayPal Agentic Commerce Engine                                                     │
-│ • 1-Click VIP Pro Feature Activation ($0.99 Authorization via PayPal JS SDK Sandbox)             │
-│ • Autonomous push alert provisioning dispatched directly to user-configured device endpoints     │
-└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Action Layer: PayPal Agentic Commerce Engine                                                    │
+│ • 1-Click VIP Pro Feature Activation ($0.99 Authorization via PayPal JS SDK Sandbox)            │
+│ • Autonomous push alert provisioning dispatched directly to user-configured device endpoints    │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 ---
 
