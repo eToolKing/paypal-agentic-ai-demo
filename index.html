@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="robots" content="noindex, nofollow, noarchive">
+   <title>eToolKing Labs: Agentic Commerce Pipeline</title>
+
+   <script src="https://www.paypal.com/sdk/js?client-id=BAAeIaYCq1NJst3k_WF3W6tG-fIerYd8sigBbbFAEm8WsTtl699g5bHOFpDMytLfikPY4uQdk7R_Lv2Nbk&currency=USD&locale=en_US"></script>
+
+   <style>
+      body {
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         max-width: 900px;
+         margin: 30px auto;
+         padding: 24px;
+         background: #f1f5f9;
+         color: #0f172a;
+         font-size: 16px;
+         line-height: 1.6;
+      }
+
+      .header-box {
+         margin-bottom: 28px;
+         border-bottom: 3px solid #cbd5e1;
+         padding-bottom: 18px;
+      }
+      .header-tag {
+         display: inline-block;
+         padding: 5px 14px;
+         background: #e0f2fe;
+         border: 2px solid #0284c7;
+         color: #0369a1;
+         border-radius: 20px;
+         font-size: 13px;
+         letter-spacing: 0.08em;
+         font-weight: 800;
+         margin-bottom: 10px;
+      }
+
+      .card {
+         background: #ffffff;
+         border-radius: 14px;
+         padding: 28px;
+         border: 2px solid #cbd5e1;
+         margin-bottom: 28px;
+         box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      }
+
+      .stream-selector {
+         display: flex;
+         gap: 16px;
+         margin-bottom: 16px;
+      }
+
+      button.btn-preset {
+         flex: 1;
+         padding: 16px 18px;
+         border-radius: 10px;
+         font-size: 16px;
+         font-weight: 700;
+         cursor: pointer;
+         transition: all 0.2s;
+         border: 2.5px solid #cbd5e1;
+         background: #ffffff;
+         color: #334155;
+         text-align: left;
+      }
+      button.btn-preset b{
+         color: #fff;
+         padding: 2px 5px;
+      }
+
+      #promo-input {
+         width: 100%;
+         min-height: 110px;
+         background: #ffffff;
+         color: #0f172a;
+         border: 2px solid #94a3b8;
+         padding: 14px;
+         border-radius: 10px;
+         box-sizing: border-box;
+         font-family: monospace;
+         font-size: 15px;
+         line-height: 1.5;
+         outline: none;
+         white-space: pre-wrap;
+         word-wrap: break-word;
+      }
+      #promo-input:focus {
+         border-color: #0284c7;
+         box-shadow: 0 0 0 3px rgba(2,132,199,0.15);
+      }
+
+      button.btn-action {
+         color: #ffffff;
+         border: none;
+         padding: 14px 28px;
+         cursor: pointer;
+         border-radius: 10px;
+         font-weight: 800;
+         font-size: 16px;
+         margin-top: 14px;
+         transition: opacity 0.2s;
+         display: inline-block;
+      }
+      button.btn-action:hover { opacity: 0.92; }
+
+      .avatar-container {
+         display: flex;
+         align-items: center;
+         gap: 16px;
+         margin-bottom: 18px;
+         padding: 14px 18px;
+         background: #f8fafc;
+         border-radius: 10px;
+         border: 2px solid #e2e8f0;
+      }
+      .monogram-avatar {
+         width: 56px;
+         height: 56px;
+         border-radius: 10px;
+         color: #ffffff;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 26px;
+         font-weight: 900;
+      }
+      .brand-title { font-size: 19px; font-weight: 800; color: #0f172a; }
+      .brand-sub { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 2px; }
+
+      pre, code {
+         background: #f8fafc;
+         padding: 20px;
+         border-radius: 10px;
+         border: 2px solid #cbd5e1;
+         overflow-x: auto;
+         color: #0f172a;
+         font-size: 15px;
+         line-height: 1.7;
+         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      #checkout-area {
+         display: none;
+         margin-top: 28px;
+         padding: 26px;
+         border: 2.5px solid #cbd5e1;
+         border-radius: 12px;
+         background: #ffffff;
+      }
+      .vip-tag {
+         display: inline-block;
+         background: #fef3c7;
+         color: #92400e;
+         border: 1.5px solid #fcd34d;
+         font-size: 12px;
+         font-weight: 800;
+         padding: 4px 10px;
+         border-radius: 6px;
+         margin-bottom: 10px;
+         letter-spacing: 0.05em;
+      }
+      .vip-title { font-size: 21px; font-weight: 900; color: #0f172a; margin: 0 0 6px 0; }
+      .vip-price { font-size: 17px; font-weight: 800; color: #15803d; margin-bottom: 12px; }
+      .vip-desc { font-size: 16px; color: #334155; margin-bottom: 20px; line-height: 1.6; }
+      .vip-terms {
+         color: #64748b; font-size: 15px; display: block; margin-top: 14px; line-height: 1.5;
+         border-top: 1px dashed #cbd5e1; padding-top: 10px;
+      }
+
+      #success-alert {
+         display: none;
+         margin-top: 20px;
+         padding: 16px 20px;
+         background: #ecfdf5;
+         border: 2px solid #10b981;
+         color: #065f46;
+         border-radius: 10px;
+         font-size: 15px;
+         font-weight: 700;
+      }
+   </style>
+</head>
+<body>
+
+<div class="header-box">
+   <div class="header-tag">AGENTIC COMMERCE LAB</div>
+   <h1 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 900;">eToolKing Labs</h1>
+   <p style="color: #475569; font-size: 16px; margin: 0; font-weight: 500;">
+      Amazon Nova Multilingual Deal Intelligence & Agentic VIP Activation Engine
+   </p>
+</div>
+
+<div class="card">
+   <div style="font-size: 15px; font-weight: 800; color: #1e293b; margin-bottom: 12px;">
+      Select Ingestion Stream:
+   </div>
+   <div class="stream-selector">
+      <button type="button" id="btn-flight" class="btn-preset" onclick="loadSample('flight')">
+         Flight Promo Stream
+         <div style="font-size: 16px; font-weight: 500; margin-top: 4px; color: #64748b;"><b style="background-color: #1877f2;">flightsSALE</b> Engine</div>
+      </button>
+      <button type="button" id="btn-retail" class="btn-preset" onclick="loadSample('retail')">
+         Retail Event Stream
+         <div style="font-size: 16px; font-weight: 500; margin-top: 4px; color: #64748b;"><b style="background-color: #e2923d;">SaleEvents</b> Engine</div>
+      </button>
+   </div>
+
+   <div id="promo-input" contenteditable="true"></div>
+   <br>
+   <button type="button" id="btn-run" class="btn-action" onclick="runAgenticExtraction()">
+      Run Nova Agent Pipeline
+   </button>
+</div>
+
+<div class="card">
+   <h3 style="margin-top: 0; font-size: 18px; font-weight: 800; color: #0f172a;">
+      Extracted Intelligence Schema:
+   </h3>
+
+   <div id="entity-header" class="avatar-container" style="display: none;">
+      <div id="monogram" class="monogram-avatar">A</div>
+      <div>
+         <div id="entity-name" class="brand-title">Entity Name</div>
+         <div id="entity-meta" class="brand-sub">Verified Stream Source</div>
+         <div style="margin-top: 4px;">
+            <a id="live-verify-link" href="#" target="_blank" style="font-size: 18px; font-weight: 700; text-decoration: none; display: none;"></a>
+         </div>
+      </div>
+   </div>
+
+   <pre id="json-output">// Click "Run Nova Agent Pipeline" above to trigger extraction...</pre>
+
+   <div id="checkout-area">
+      <div class="vip-tag">VIP MEMBERSHIP</div>
+      <div class="vip-title">Become a VIP & Unlock Pro Features (PayPal Sandbox)</div>
+      <div class="vip-price">$0.99 / Month • Cancel Anytime</div>
+      <div class="vip-desc">
+         Under $1 a month to become our VIP and unlock advanced autonomous features. VIP members receive instant push notifications sent directly to your device the second our AI pipeline detects deals matching your custom criteria.
+         <span class="vip-terms">
+          *Notice: VIP membership unlocks advanced AI notification and monitoring capabilities only. We do not sell, book, issue, or process payments for any flights, tickets, or retail goods. All transactions are completed directly with the official airlines or merchants.
+        </span>
+      </div>
+
+      <div id="paypal-button-container"></div>
+      <div id="success-alert">✓ Sandbox Authorization Captured! VIP Pro Features Successfully Activated.</div>
+   </div>
+</div>
+
+<script>
+   const urlParams = new URLSearchParams(window.location.search);
+   const token = urlParams.get('token');
+   if (token !== 'devpost-2026') {
+      window.location.href = '/';
+   }
+
+   let activeType = 'flight';
+   const THEME_COLORS = { flight: '#1877f2', retail: '#e2923d' };
+
+   function loadSample(type) {
+      activeType = type;
+      const activeColor = THEME_COLORS[type];
+
+      document.getElementById('btn-flight').style.borderColor = (type === 'flight') ? activeColor : '#cbd5e1';
+      document.getElementById('btn-flight').style.background = (type === 'flight') ? '#f0f7ff' : '#ffffff';
+      document.getElementById('btn-flight').style.color = (type === 'flight') ? activeColor : '#334155';
+
+      document.getElementById('btn-retail').style.borderColor = (type === 'retail') ? activeColor : '#cbd5e1';
+      document.getElementById('btn-retail').style.background = (type === 'retail') ? '#fffaf0' : '#ffffff';
+      document.getElementById('btn-retail').style.color = (type === 'retail') ? activeColor : '#334155';
+
+      document.getElementById('btn-run').style.background = activeColor;
+      document.getElementById('checkout-area').style.borderColor = activeColor;
+
+      document.getElementById('promo-input').innerText = (type === 'flight')
+         ? `Where to next? ✈️⭐️
+
+Fly with STARLUX Airlines and enjoy exciting deals to your next destination. 🤎
+
+🎟️ Promo Code: FLYMOREJXBDO
+📅 Booking Period: Until November 5, 2026
+✈️ Travel Period: Until April 10, 2027
+🌏 Destinations: Los Angeles • San Francisco • Seattle • Ontario • Phoenix • Prague • Taipei
+
+🔄 One-way & roundtrip fares available
+📍 Departing from Manila, Clark, or Cebu
+👨‍👩‍👧 Available for adults & infants
+💺 Valid on Economy Class (Saving & Limited) and Premium Economy Saving
+⌛ Limited seats available. Promo code may be invalid if promotional seats are unavailable
+
+Soar to your next adventure with the STAR ✈️
+
+🌐 https://starlux.link/9q4n58
+
+#STARLUX
+#STARLUXAirlines
+#LuxuryBeyondHorizons`
+         : "The Boscov’s Anniversary Sale is HERE! 🎉 Shop incredible deals on all your favorites and score big on savings! Don’t wait, these deals are only here through Wednesday, November 4th! 👀 #Boscovs #AnniversarySale #ShopBoscovs";
+   }
+
+   loadSample('flight');
+
+   function runAgenticExtraction() {
+      const output = document.getElementById('json-output');
+      output.innerText = "Invoking Amazon Nova Cascading Pipeline [Nova Lite -> Nova Pro]...";
+
+      // 使用最原始、穿透力最強、不受外掛攔截的 XMLHttpRequest
+      const xhr = new XMLHttpRequest();
+      const targetUrl = '/lab/analyze?token=' + encodeURIComponent(token) + '&type=' + encodeURIComponent(activeType);
+
+      xhr.open('GET', targetUrl, true);
+
+      xhr.onload = function() {
+         if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+               const data = JSON.parse(xhr.responseText);
+               output.innerText = JSON.stringify(data, null, 2);
+
+               const activeColor = THEME_COLORS[activeType];
+               const entityName = (activeType === 'flight') ? data.airline : data.store;
+               const monogramEl = document.getElementById('monogram');
+               monogramEl.innerText = entityName.charAt(0);
+               monogramEl.style.background = activeColor;
+
+               document.getElementById('entity-name').innerText = entityName;
+               document.getElementById('entity-meta').innerText = (activeType === 'flight') ? "Source Verified Airline Stream" : "Global Retail Ingestion Stream";
+
+               const verifyLinkEl = document.getElementById('live-verify-link');
+               if (data.canonical_url) {
+                  verifyLinkEl.href = data.canonical_url;
+                  verifyLinkEl.style.color = activeColor;
+                  verifyLinkEl.innerText = "↗ View Canonical Record on " + ((activeType === 'flight') ? "flights-sale.com" : "SaleEvents Node");
+                  verifyLinkEl.style.display = 'inline-block';
+               } else {
+                  verifyLinkEl.style.display = 'none';
+               }
+
+               document.getElementById('entity-header').style.display = 'flex';
+               document.getElementById('checkout-area').style.display = 'block';
+
+            } catch (e) {
+               output.innerText = "JSON Parse Error: " + e.message;
+            }
+         } else {
+            output.innerText = "Server Error: HTTP " + xhr.status;
+         }
+      };
+
+      xhr.onerror = function() {
+         output.innerText = "Network Error: Request blocked or failed.";
+      };
+
+      xhr.send();
+   }
+
+   paypal.Buttons({
+      createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: '0.99' } }] }),
+      onApprove: (data, actions) => actions.order.capture().then(() => {
+         document.getElementById('success-alert').style.display = 'block';
+      })
+   }).render('#paypal-button-container');
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"19293b649fb74e6197b57334ecb60788","r":1,"spa":2}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a59c7ad9e8af0a06',t:'MTc5NDU1OTMxMg=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a59c7ad9e8af0a06',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
